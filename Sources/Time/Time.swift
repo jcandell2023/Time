@@ -78,7 +78,7 @@ extension Time {
             }
             if hours == 0 {
                 formedHours = 12
-            } else if hours > 13 {
+            } else if hours > 12 {
                 formedHours -= 12
             }
             let base = String(format: "%d:%02d", formedHours, minutes)
@@ -97,7 +97,12 @@ extension Time: Codable {
     public init(from decoder: any Decoder) throws {
         let string = try decoder.singleValueContainer().decode(String.self)
         guard let time = Time(from: string) else {
-            throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "String could not be parsed to a valid time"))
+            throw DecodingError.dataCorrupted(
+                .init(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "String could not be parsed to a valid time"
+                )
+            )
         }
 
         self.init(hours: time.hours, minutes: time.minutes, seconds: time.seconds)
